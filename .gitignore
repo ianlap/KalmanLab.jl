@@ -1,0 +1,28 @@
+# Julia
+*.jl.*.cov
+*.jl.cov
+*.jl.mem
+/Manifest.toml
+/dev/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation build
+/docs/build/
+
+# Claude AI assistance files
+CLAUDE.md
+
+# Temporary files
+*.tmp
+*.temp
+
+# Benchmarks and profiling
+/benchmark/results/
+*.profile
