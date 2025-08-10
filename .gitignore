@@ -18,10 +18,14 @@ Thumbs.db
 
 # Claude AI assistance files
 CLAUDE.md
+DIRECTORY_ORGANIZATION.md
 
-# Temporary files
+# Temporary files and test outputs
 *.tmp
 *.temp
+test_*.jl
+debug_*.jl
+*_results*.txt
 
 # Benchmarks and profiling
 /benchmark/results/
