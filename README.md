@@ -1,4 +1,4 @@
-# KalmanFilters.jl
+# KalmanLab.jl
 
 A Julia package for oscillator phase/frequency tracking using Kalman filters with PID steering control.
 
@@ -22,7 +22,7 @@ This package provides a clean, performant implementation of Kalman filtering for
 ## Quick Start
 
 ```julia
-using KalmanFilters
+using KalmanLab
 
 # Create a 3-state filter with PID control
 kf = KalmanFilter(
@@ -51,7 +51,7 @@ predictions = holdoverpredict(kf, [10, 100, 1000])  # Predict 10, 100, 1000 step
 This package is currently under development. To use:
 
 ```julia
-] dev path/to/KalmanFilters
+] dev path/to/KalmanLab
 ```
 
 ## Documentation
