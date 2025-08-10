@@ -38,8 +38,8 @@ julia_matrix = hcat(julia_results.phase_est, julia_results.freq_est,
 writedlm("test/kalman_results_julia_comparison.txt", julia_matrix, '\t')
 
 println("Julia results saved")
-println("  Phase RMS: $(sqrt(mean(julia_results.phase_est.^2)):.3e) ns")
-println("  Residual RMS: $(sqrt(mean(julia_results.residuals.^2)):.3e) ns")
+println("  Phase RMS: $(round(sqrt(mean(julia_results.phase_est.^2)), digits=3)) ns")
+println("  Residual RMS: $(round(sqrt(mean(julia_results.residuals.^2)), digits=3)) ns")
 println("  Final state: $(round.(julia_results.final_state, digits=6))")
 
 # Generate MATLAB results for same subset

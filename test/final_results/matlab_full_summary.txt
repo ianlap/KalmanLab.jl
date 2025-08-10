@@ -1,0 +1,9 @@
+MATLAB Full Dataset Results
+Samples: 406763
+Processing time: 1.15 s
+Rate: 352828 samples/s
+Phase RMS: 0.097419 ns
+Freq RMS: 0.09368587 ns/s
+Residual RMS: 8.401 ns
+Final phase: 0.002357 ns
+Final freq: 0.04436079 ns/s

@@ -1,0 +1,11 @@
+Julia Full Dataset Results
+Samples: 406763
+Processing time: 5.59 s
+Rate: 72814.0 samples/s
+Phase RMS: 0.059054 ns
+Freq RMS: 0.05600363 ns/s
+Residual RMS: 8.443 ns
+Final phase: 0.001349 ns
+Final freq: 0.03268277 ns/s
+P condition: 4.764930973733049e13
+Min eigenval: 0.0

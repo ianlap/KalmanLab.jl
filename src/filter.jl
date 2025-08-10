@@ -91,12 +91,17 @@ function run(kf::KalmanFilter{T}, data::Vector{T}) where T
             
             # Predict covariance: P⁻ = ΦP⁺Φᵀ + Q
             P = Φ * P * Φ' + Q
+            
+            # Ensure symmetry after prediction step
+            P = Symmetric(P)
         end
         
         # --- Update phase measurement with steering effects ---
         if k > 1
-            # Incorporate cumulative steering effects into measurement
-            phase[k] = results.sum2steers[k-1] + data[k] - data[k-1] + results.sumsteers[k-1]
+            # MATLAB does this (line 152 overwrites line 151):
+            # phase(k) = phase(k-1) + rawphase(k) - rawphase(k-1) + sumsteers(k-1);
+            # In MATLAB: phase is working copy, rawphase is original data
+            phase[k] = phase[k-1] + data[k] - data[k-1] + results.sumsteers[k-1]
         end
         
         # --- Innovation (prediction error) ---
@@ -112,14 +117,19 @@ function run(kf::KalmanFilter{T}, data::Vector{T}) where T
         # State update: x⁺ = x⁻ + Kz
         x = x + K * innovation
         
-        # Covariance update (Joseph form for numerical stability)
-        # P⁺ = (I - KH)P⁻(I - KH)ᵀ + KRKᵀ
-        # K is column vector (nstates×1), H is row vector (1×nstates)
-        I_KH = I - K * H  # K is column, H is row, so K*H is nstates×nstates
-        P = I_KH * P * I_KH' + K * K' * R
+        # Covariance update - MATLAB exact match
+        # Use simple form exactly as MATLAB (line 167: P = I_KH * P)
+        I_KH = I - K * H  # K is column vector, H is row vector
+        P = I_KH * P      # Simple form - matches MATLAB exactly
         
-        # Simpler form: P = (I - KH)P (less stable but matches MATLAB)
-        # P = (I - K * H') * P
+        # Force symmetry to ensure numerical stability (like MATLAB line 170)
+        P = Symmetric(P)
+        
+        # Stabilized form (more stable but doesn't match MATLAB):
+        # P = I_KH * P * I_KH'
+        
+        # Full Joseph form (most stable but doesn't match MATLAB):
+        # P = I_KH * P * I_KH' + K * K' * R
         
         # --- Calculate residual ---
         residual = phase[k] - x[1]
@@ -200,7 +210,8 @@ function initialize_filter_state(kf::KalmanFilter{T}, N::Int) where T
     
     # Initial state and covariance
     x = copy(kf.x0)
-    P = isa(kf.P0, Matrix) ? copy(kf.P0) : Matrix{T}(kf.P0 * I, nstates, nstates)
+    P_init = isa(kf.P0, Matrix) ? copy(kf.P0) : Matrix{T}(kf.P0 * I, nstates, nstates)
+    P = Symmetric(P_init)  # Ensure initial covariance is symmetric
     
     # System matrices
     Φ = Matrix{T}(I, nstates, nstates)  # State transition (updated each step)
